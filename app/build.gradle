@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    ext.support_version = "23.2.0"
     ext.realm_version = "0.87.5"
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -42,9 +43,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Support library
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
-    compile 'com.android.support:support-vector-drawable:23.2.0'
+    compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:design:$support_version"
+    compile "com.android.support:support-vector-drawable:$support_version"
+    compile "com.android.support:animated-vector-drawable:$support_version"
 
     // Realm
     compile "io.realm:realm-android:$realm_version"

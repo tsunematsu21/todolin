@@ -7,7 +7,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.view.ViewPager
+import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import com.tunesworks.todolin.R
@@ -17,18 +20,41 @@ import com.tunesworks.todolin.value.primary
 import com.tunesworks.todolin.value.primaryDark
 import com.tunesworks.todolin.value.primaryLight
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.properties.Delegates
 
 class MainActivity : BaseActivity() {
     val REQUEST_CODE = 0
+
+    var bottomSheetBehavior: BottomSheetBehavior<View> by Delegates.notNull<BottomSheetBehavior<View>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var oldSlideOffset = 0f
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet as View).apply {
+            setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    if (slideOffset > 0.8) {
+                        if (oldSlideOffset > slideOffset) fab.show()
+                        else fab.hide()
+
+                    } else if (slideOffset < -0.7) {
+                        if (oldSlideOffset < slideOffset) fab.show()
+                        else fab.hide()
+                    }
+                    oldSlideOffset = slideOffset
+                }
+                override fun onStateChanged(bottomSheet: View, newState: Int) {}
+            })
+        }
+        bottomSheet.setOnClickListener {}
+
+
         view_pager.apply {
             adapter = PagerAdapter(supportFragmentManager)
 
-            fab.setOnClickListener {
+            fab.setOnLongClickListener {
                 try {
                     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -38,6 +64,10 @@ class MainActivity : BaseActivity() {
                 } catch (e: ActivityNotFoundException) {
                     Toast.makeText(this@MainActivity, "Error: Activity Not Found!", Toast.LENGTH_SHORT).show()
                 }
+                true
+            }
+            fab.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
             var oldItemColor = ItemColor.DEFAULT
