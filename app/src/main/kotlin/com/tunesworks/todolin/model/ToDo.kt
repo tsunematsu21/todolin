@@ -10,6 +10,7 @@ open class ToDo(
         @PrimaryKey
         open var uuid: String = UUID.randomUUID().toString(),
         open var title: String = "",
+        open var deadline: Date? = null,
         open var createdAt: Date = Date(),
         open var updatedAt: Date = Date()
 ): RealmObject() {}

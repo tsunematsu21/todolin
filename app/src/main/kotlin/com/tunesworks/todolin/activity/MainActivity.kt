@@ -9,16 +9,21 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import com.tunesworks.todolin.R
+import com.tunesworks.todolin.ToDolin
+import com.tunesworks.todolin.event.ToDoEvent
 import com.tunesworks.todolin.fragment.PagerAdapter
+import com.tunesworks.todolin.model.ToDo
 import com.tunesworks.todolin.value.ItemColor
 import com.tunesworks.todolin.value.primary
 import com.tunesworks.todolin.value.primaryDark
 import com.tunesworks.todolin.value.primaryLight
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.properties.Delegates
 
@@ -108,9 +113,23 @@ class MainActivity : BaseActivity() {
         if ((REQUEST_CODE == requestCode) && (RESULT_OK == resultCode)) {
             val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             if (results != null) {
-                Toast.makeText(this, results.first(), Toast.LENGTH_LONG).show()
-                //createToDo(results.first())
-                //results.forEach { Log.d(this@MainActivity.javaClass.name, "Recognizer Result: $it") }
+                Realm.getDefaultInstance().use { realm ->
+                    val todo = ToDo(title = results.first())
+                    realm.executeTransaction({
+                        it.copyToRealm(todo)
+                    }, object : Realm.Transaction.Callback() {
+                        override fun onSuccess() {
+                            super.onSuccess()
+                            ToDolin.bus.post(ToDoEvent.Create(todo))
+                            Snackbar.make(fab, "Create new ToDo", Toast.LENGTH_SHORT)
+                        }
+
+                        override fun onError(e: Exception?) {
+                            super.onError(e)
+                            Snackbar.make(fab, "Error!!!", Toast.LENGTH_SHORT)
+                        }
+                    })
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
