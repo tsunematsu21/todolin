@@ -47,6 +47,7 @@ dependencies {
     compile "com.android.support:design:$support_version"
     compile "com.android.support:support-vector-drawable:$support_version"
     compile "com.android.support:animated-vector-drawable:$support_version"
+    compile "com.android.support:percent:$support_version"
 
     // Realm
     compile "io.realm:realm-android:$realm_version"

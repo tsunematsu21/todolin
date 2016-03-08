@@ -66,5 +66,7 @@ class ListFragment : BaseFragment() {
                 return
             }
         }
+
+        adapter.notifyDataSetChanged()
     }
 }

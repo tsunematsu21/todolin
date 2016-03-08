@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -60,15 +61,46 @@
             android:text="PIYOPIYO"/>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        app:fabSize="normal"
-        app:borderWidth="0dp"
-        app:backgroundTint="@color/accent"
-        app:layout_anchor="@+id/bottomSheet"
-        app:layout_anchorGravity="right|top"/>
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@drawable/ic_add_white_24dp"-->
+        <!--app:fabSize="normal"-->
+        <!--app:borderWidth="0dp"-->
+        <!--app:backgroundTint="@color/accent"-->
+        <!--app:layout_anchor="@+id/bottomSheet"-->
+        <!--app:layout_anchorGravity="right|top"/>-->
 
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/hint_text"
+        app:layout_anchor="@+id/view_pager"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="com.tunesworks.todolin.BottomBarBehavior">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/add"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:padding="16dp"
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackground"
+            app:layout_widthPercent="50%"
+            app:layout_heightPercent="100%"
+            app:srcCompat="@drawable/ic_add_white_24dp"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mic"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentRight="true"
+            android:padding="16dp"
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackground"
+            app:layout_widthPercent="50%"
+            app:layout_heightPercent="100%"
+            app:srcCompat="@drawable/ic_mic_white_24dp"/>
+    </android.support.percent.PercentRelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
